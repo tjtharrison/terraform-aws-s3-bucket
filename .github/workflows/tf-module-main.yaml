@@ -1,0 +1,35 @@
+name: Deploy module
+
+on:
+  push:
+    branches:
+      main
+env:
+  GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+jobs:
+  bump-version-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch_depth: 0
+      - run: |
+          sudo apt-get install jq npm -y
+          npm --no-git-tag-version version minor 
+          echo NEW_VERSION=$(cat package.json | jq -r '.version') >> $GITHUB_ENV
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Bumped version
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          NEW_VERSION: ${{ env.NEW_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ env.NEW_VERSION }}
+          release_name: Release ${{ env.NEW_VERSION }}
+          draft: false
+          prerelease: false 
