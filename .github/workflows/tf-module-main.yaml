@@ -17,12 +17,25 @@ jobs:
           fetch_depth: 0
       - run: |
           sudo apt-get install jq npm -y
-          npm --no-git-tag-version version minor 
-          echo NEW_VERSION=$(cat package.json | jq -r '.version') >> $GITHUB_ENV
+
+          pr_number=$(git log --pretty=oneline | grep "Merge pull request" | head -1 | awk {'print $5'} | sed 's/#//g')
+
+          bump_type=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$pr_number" | jq -r '.labels[].name')
+
+          if [[ $bump_type != "none" ]]; then
+            echo "Bumping: $bump_type"
+            npm --no-git-tag-version version $bump_type
+            echo NEW_VERSION=$(cat package.json | jq -r '.version') >> $GITHUB_ENV
+            echo DO_RELEASE="true" >> $GITHUB_ENV
+          else
+            echo "Not bumping module version"
+            echo DO_RELEASE="false" >> $GITHUB_ENV
+          fi
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Bumped version
       - name: Create Release
+        if: env.DO_RELEASE == 'true'
         id: create_release
         uses: actions/create-release@v1
         env:
