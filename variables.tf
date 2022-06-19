@@ -2,12 +2,6 @@ variable "bucket_name" {
   description = "The name to be assigned to bucket and resources"
 }
 
-variable "enable_versioning" {
-  description = "Whether or not to enable versioning on bucket resources"
-  default     = true
-  type        = bool
-}
-
 variable "bucket_public_acl" {
   description = "Whether or not bucket should have a publicly accessible ACL"
   default     = "private"
