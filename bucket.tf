@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "this" {
   }
 
   dynamic "logging" {
-    count = var.access_logging ? 1 : 0
+    for_each = var.access_logging ? [1] : []
     content {
       target_bucket = var.access_logging_bucket
       target_prefix = "log/${var.bucket_name}"
