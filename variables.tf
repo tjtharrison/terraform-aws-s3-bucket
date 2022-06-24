@@ -7,7 +7,7 @@ variable "bucket_public_acl" {
   default     = "private"
   type        = string
   validation {
-    condition = can(regex("private|public-read|public-read-write|authenticated-read|aws-exec-read|log-delivery-write", var.bucket_public_acl))
+    condition     = can(regex("private|public-read|public-read-write|authenticated-read|aws-exec-read|log-delivery-write", var.bucket_public_acl))
     error_message = "Must be one of \"private public-read public-read-write authenticated-read aws-exec-read log-delivery-write\"."
   }
 }
@@ -38,16 +38,16 @@ variable "ignore_public_acls" {
 
 variable "enable_versioning" {
   description = "Whether or not to enable object versioning"
-  default = true
-  type = bool
+  default     = true
+  type        = bool
 }
 
 variable "access_logging" {
   description = "Whether or not to enable access logging on the bucket"
-  default = true
+  default     = true
 }
 
 variable "access_logging_bucket" {
   description = "Destination for access logging"
-  default = ""
+  default     = ""
 }
