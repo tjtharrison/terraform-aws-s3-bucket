@@ -8,15 +8,7 @@ resource "aws_s3_bucket" "this" {
     }
   }
   versioning {
-    enabled    = var.enable_versioning
-  }
-
-  dynamic "logging" {
-    for_each = var.access_logging ? [1] : []
-    content {
-      target_bucket = var.access_logging_bucket
-      target_prefix = "log/${var.bucket_name}"
-    }
+    enabled = var.enable_versioning
   }
 }
 
