@@ -31,7 +31,7 @@ jobs:
             echo "Not bumping module version"
             echo DO_RELEASE="false" >> $GITHUB_ENV
           fi
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: Bumped version
       - name: Create Release
