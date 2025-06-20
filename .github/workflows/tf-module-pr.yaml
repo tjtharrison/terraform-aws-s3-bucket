@@ -27,7 +27,7 @@ jobs:
         output-method: inject
         git-push: "true"
 
-    - uses: stefanzweifel/git-auto-commit-action@v4
+    - uses: stefanzweifel/git-auto-commit-action@v6
       with:
         commit_message: Labelled and updated docs
         file_pattern: "**.tf *.md"
